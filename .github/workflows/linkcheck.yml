@@ -1,0 +1,17 @@
+name: Weekly link check
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+jobs:
+  lychee:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check links in content (dead affiliate links are revenue-relevant)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress --exclude-mail './src/**/*.md' './src/**/*.mdx' './src/**/*.astro'
+          fail: true
