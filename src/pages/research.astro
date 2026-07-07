@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Research lines per 02-PRD §9. Write-ups follow the structured format:
+// hypothesis → method → result → uncertainty resolved? Contemporaneous
+// records here are what make future R&D funding claims possible.
+const lines = [
+  {
+    id: 'R1',
+    title: 'Tenant density and economics of self-hosted app platforms on commodity hardware',
+    body: 'How many real tenants can one commodity box host before things get weird, and what does that make the true cost per tenant? This is Northstack’s open question, answered in public with numbers.',
+  },
+  {
+    id: 'R2',
+    title: 'Local and self-hosted AI performance and cost benchmarks on consumer hardware, in Canadian conditions',
+    body: 'Tokens per second is easy to benchmark. Tokens per second per dollar at Ontario electricity rates with Canadian hardware availability is the number that actually matters here, and nobody publishes it.',
+  },
+  {
+    id: 'R3',
+    title: 'Applied AI workflows for infrastructure project management',
+    body: 'Where AI tools genuinely help in planning and delivering large construction and infrastructure projects, and where they confidently make things up. Kept generic on purpose, methods and benchmarks only.',
+  },
+];
+---
+
+<Base
+  title="Research · Informal Engineer"
+  description="The lab's research lines: hypotheses, methods, results, and uncertainties, recorded as we go."
+>
+  <h1>Research</h1>
+  <p class="lede">
+    The lab runs a few standing research lines. Each write-up follows the same
+    structure (hypothesis, method, result, what uncertainty got resolved),
+    and results publish whether they're flattering or not.
+  </p>
+  {
+    lines.map((line) => (
+      <div class="card" style="cursor: default;">
+        <span class="badge">{line.id}</span>
+        <strong> {line.title}</strong>
+        <p>{line.body}</p>
+      </div>
+    ))
+  }
+  <p class="section-label">status</p>
+  <p class="lede">
+    First structured write-ups are queued behind the launch content. Raw
+    progress shows up in the <a href="/notes/">Lab Notes</a> first.
+  </p>
+</Base>

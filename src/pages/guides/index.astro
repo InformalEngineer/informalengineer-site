@@ -1,0 +1,50 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const guides = (await getCollection('guides', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+const categories = ['Homelab', 'Self-hosted AI', 'Networking', 'Tools'];
+---
+
+<Base
+  title="Guides · Informal Engineer"
+  description="The evergreen library: tested procedures with bills of materials, named versions, and honest failure notes."
+>
+  <h1>Guides</h1>
+  <p class="lede">
+    Evergreen, versioned, and dated. Every guide says exactly what it was
+    tested on and keeps a changelog, because a procedure without versions is a
+    rumor.
+  </p>
+  {
+    categories.map((cat) => {
+      const inCat = guides.filter((g) => g.data.category === cat);
+      if (inCat.length === 0) return null;
+      return (
+        <>
+          <p class="section-label">{cat}</p>
+          {inCat.map((g) => (
+            <a class="card" href={`/guides/${g.id}/`}>
+              <strong>{g.data.title}</strong>
+              <p>{g.data.summary}</p>
+              <div class="meta">
+                {g.data.difficulty} · {g.data.timeEstimate} · updated{' '}
+                {(g.data.changelog.at(-1)?.date ?? g.data.publishDate)
+                  .toISOString()
+                  .slice(0, 10)}
+              </div>
+            </a>
+          ))}
+        </>
+      );
+    })
+  }
+  <p class="section-label">in the pipeline</p>
+  <p class="lede">
+    Docker for people who wish they had a decent intro, the SAS NAS build
+    series, and Proxmox notes are queued. The <a href="/rss.xml">feed</a> gets
+    them first.
+  </p>
+</Base>

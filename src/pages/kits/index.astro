@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const kits = (await getCollection('kits', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+---
+
+<Base
+  title="Kits · Informal Engineer"
+  description="Curated parts lists with test data: the exact HBA, cables, and drives from real builds, with measured costs in CAD."
+>
+  <h1>Kits</h1>
+  <p class="lede">
+    Parts lists from builds that actually happened: the exact HBA, the exact
+    cables, where I bought them, and what they cost me in Canadian dollars.
+    No SKU goes on a list I haven't run myself.
+  </p>
+  {
+    kits.length > 0 ? (
+      kits.map((kit) => (
+        <a class="card" href={`/kits/${kit.id}/`}>
+          <strong>{kit.data.title}</strong>
+          <p>{kit.data.summary}</p>
+          <div class="meta">measured total: ${kit.data.totalCostCAD} CAD</div>
+        </a>
+      ))
+    ) : (
+      <>
+        <p class="section-label">first kit</p>
+        <p class="lede">
+          The SAS NAS kit (used enterprise drives, an HBA in IT mode, and the
+          cables nobody warns you about) is being written up from my actual
+          build, with photos and measured costs. It lands with the paired
+          guide and video.
+        </p>
+      </>
+    )
+  }
+  <p class="section-label">disclosure</p>
+  <p class="lede" style="font-size: 0.85rem;">
+    Kit part links are affiliate links where a program exists. That's the
+    entire business model of this page and it's disclosed here and on every
+    kit. Prices listed are what I actually paid, not list prices.
+  </p>
+</Base>

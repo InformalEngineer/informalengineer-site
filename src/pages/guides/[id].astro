@@ -1,0 +1,111 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides', ({ data }) => !data.draft);
+  return guides.map((guide) => ({ params: { id: guide.id }, props: { guide } }));
+}
+
+const { guide } = Astro.props;
+const { Content } = await render(guide);
+const d = guide.data;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: d.title,
+  description: d.summary,
+  datePublished: d.publishDate.toISOString(),
+  dateModified: (d.changelog.at(-1)?.date ?? d.publishDate).toISOString(),
+  author: { '@type': 'Person', name: 'Mesh Rahman', url: 'https://meshrahman.com' },
+};
+---
+
+<Base title={`${d.title} · Informal Engineer`} description={d.summary}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <p class="meta" style="font-family: ui-monospace, monospace; font-size: 0.75rem; color: var(--faint);">
+    {d.category} · {d.difficulty} · {d.timeEstimate} · answers: “{d.primaryQuery}”
+  </p>
+  <h1>{d.title}</h1>
+
+  <blockquote class="lede" style="border-left: 3px solid var(--accent); margin-left: 0; padding-left: 1rem;">
+    {d.summary}
+  </blockquote>
+
+  <p class="section-label">tested on</p>
+  <table>
+    <tbody>
+      <tr><th>Hardware</th><td>{d.testedOn.hardware.join(', ')}</td></tr>
+      <tr><th>Software</th><td>{d.testedOn.software.join(', ')}</td></tr>
+      <tr><th>Date</th><td>{d.testedOn.date.toISOString().slice(0, 10)}</td></tr>
+    </tbody>
+  </table>
+
+  {
+    d.bom && d.bom.length > 0 && (
+      <>
+        <p class="section-label">bill of materials (CAD)</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qty</th>
+              <th>Cost</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            {d.bom.map((row) => (
+              <tr>
+                <td>{row.link ? <a href={row.link}>{row.item}</a> : row.item}</td>
+                <td>{row.qty}</td>
+                <td>${row.costCAD}</td>
+                <td>{row.source}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </>
+    )
+  }
+
+  <div class="prose">
+    <Content />
+  </div>
+
+  <p class="section-label">changelog</p>
+  <ul>
+    {
+      d.changelog.map((entry) => (
+        <li style="color: var(--muted); font-size: 0.9rem;">
+          <span style="font-family: ui-monospace, monospace;">
+            {entry.date.toISOString().slice(0, 10)}
+          </span>{' '}
+          — {entry.change}
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="section-label">one ask</p>
+  <p class="lede">
+    {
+      d.cta === 'northstack' ? (
+        <>
+          Want this running without the maintenance?{' '}
+          <a href="/northstack/">Northstack hosts it, join the waitlist</a>.
+        </>
+      ) : d.cta === 'kit' && d.relatedKit ? (
+        <>
+          The exact parts I used are in <a href={`/kits/${d.relatedKit}/`}>the kit</a>.
+        </>
+      ) : (
+        <>
+          If this saved you an evening, the <a href="/newsletter/">weekly Lab Notes</a>{' '}
+          are more of the same.
+        </>
+      )
+    }
+  </p>
+</Base>

@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Newsletter · Informal Engineer"
+  description="Lab Notes weekly: what got tested, what the numbers said, one useful link. Under 500 words."
+>
+  <h1>Lab Notes, weekly</h1>
+  <p class="lede">
+    One email a week: the week's lab notes with a line of context each, and
+    one link to something I genuinely used. Under 500 words, plain text
+    energy, no growth hacks.
+  </p>
+
+  <p class="section-label">a note on the transition</p>
+  <p class="lede">
+    This list used to be called Founder Design Handbook on the old site. Same
+    author, new name, sharper focus (builds and numbers instead of everything
+    at once). If you were subscribed there, you'll get one re-introduction
+    email with a very easy unsubscribe link, no hard feelings either way.
+  </p>
+
+  <p class="section-label">subscribe</p>
+  <p class="lede">
+    The new sending setup is going live right now. Until the form exists,
+    subscribing is one honest email:
+  </p>
+  <a
+    href="mailto:MeshaelR@gmail.com?subject=Subscribe%20to%20Lab%20Notes&body=Sign%20me%20up."
+    style="display: inline-block; background: var(--accent); color: #101214; padding: 0.5rem 1.1rem; border-radius: 5px; text-decoration: none; font-weight: 500;"
+  >
+    Subscribe by email
+  </a>
+  <p class="lede" style="margin-top: 1rem;">
+    Prefer a reader? The <a href="/rss.xml">full-content RSS feed</a> carries
+    everything the email does.
+  </p>
+</Base>

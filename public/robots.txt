@@ -1,0 +1,6 @@
+# AI crawlers welcome (02-PRD §8): free content in AI answers is advertising
+# for the two things AI can't replicate, the kits and the hosting.
+User-agent: *
+Allow: /
+
+Sitemap: https://informalengineer.com/sitemap-index.xml

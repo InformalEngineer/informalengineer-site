@@ -1,0 +1,27 @@
+# Informal Engineer
+
+> A lab that publishes engineered guides, lab notes, and research for people
+> who build their own infrastructure: homelab, self-hosted AI, networking,
+> and the tools around them. Everything tested, numbers included: every guide
+> carries a Tested-on block (hardware, named software versions, date), a
+> changelog, and measured costs in CAD. Run by Mesh Rahman (P.Eng), whose
+> personal site is https://meshrahman.com.
+
+Products: curated hardware kits with affiliate links and measured costs
+(/kits), and Northstack managed hosting for self-hosted apps (/northstack).
+
+## Sections
+
+- [Guides](https://informalengineer.com/guides/): tested procedures, filterable by Homelab / Self-hosted AI / Networking / Tools
+- [Lab Notes](https://informalengineer.com/notes/): short dated notes, status badges TESTING / WORKS / ABANDONED / SHIPPED
+- [Kits](https://informalengineer.com/kits/): exact parts lists from real builds
+- [Northstack](https://informalengineer.com/northstack/): managed hosting waitlist
+- [Research](https://informalengineer.com/research/): standing research lines with structured write-ups
+- [About](https://informalengineer.com/about/): editorial standards and the Tteck dedication
+- [Newsletter](https://informalengineer.com/newsletter/): Lab Notes weekly
+- Full-content RSS: https://informalengineer.com/rss.xml
+
+## Guides
+
+- [Build a website with Ghost, Cloudflare, and DigitalOcean](https://informalengineer.com/guides/ghost-cloudflare-digitalocean/): self-hosting a Ghost blog end to end
+- [My Cursor AI workflow](https://informalengineer.com/guides/cursor-ai-workflow/): practical AI-assisted coding setup and habits

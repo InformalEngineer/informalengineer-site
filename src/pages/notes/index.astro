@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<Base
+  title="Lab Notes · Informal Engineer"
+  description="The weekly heartbeat: short dated notes from whatever is on the bench, 400 words max, at least one real number each."
+>
+  <h1>Lab Notes</h1>
+  <p class="lede">
+    Short, dated, and honest. 400 words max, at least one real number, and
+    abandoned experiments stay published because negative results are data.
+    Statuses: TESTING, WORKS, ABANDONED, SHIPPED.
+  </p>
+  {
+    notes.map((note) => (
+      <a class="card" href={`/notes/${note.id}/`}>
+        <span class:list={['badge', note.data.status]}>{note.data.status}</span>
+        <strong> {note.data.title}</strong>
+        <div class="meta">{note.data.date.toISOString().slice(0, 10)}</div>
+      </a>
+    ))
+  }
+  <p class="section-label">subscribe</p>
+  <p class="lede">
+    <a href="/notes/rss.xml">Full-content RSS</a> or the{' '}
+    <a href="/newsletter/">weekly email</a>.
+  </p>
+</Base>
