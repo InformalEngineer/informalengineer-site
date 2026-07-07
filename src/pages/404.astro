@@ -1,0 +1,51 @@
+---
+// Without this page, Cloudflare Pages falls back to serving index.html with a
+// 200 for every unknown path, which breaks the migration validation script
+// (ops repo) and lies to crawlers. A real 404 is load-bearing here.
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>404, not here</title>
+    <meta name="robots" content="noindex" />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #101214;
+        color: #e8eaed;
+        font-family: system-ui, sans-serif;
+        line-height: 1.6;
+      }
+      main {
+        max-width: 42rem;
+        padding: 3rem 1.5rem;
+      }
+      h1 {
+        font-size: 1.6rem;
+        margin: 0 0 1rem;
+      }
+      a {
+        color: #7dd3a0;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>404. This page doesn't exist.</h1>
+      <p>
+        Maybe it will (the lab is young). Start from <a href="/">the front page</a>.
+      </p>
+    </main>
+  </body>
+</html>
