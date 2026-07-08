@@ -10,6 +10,17 @@ const guides = (await getCollection('guides', ({ data }) => !data.draft)).sort(
 );
 const latestGuide = guides[0];
 const latestNotes = notes.slice(0, 3);
+
+// Bench meter values: real counts from the content collections and the most
+// recent date anything on the bench was actually tested.
+const lastTested = [
+  ...guides.map((g) => g.data.testedOn.date),
+  ...notes.map((n) => n.data.date),
+]
+  .sort((a, b) => b.valueOf() - a.valueOf())[0]
+  ?.toISOString()
+  .slice(0, 10);
+const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
 <Base
@@ -23,6 +34,14 @@ const latestNotes = notes.slice(0, 3);
   <p class="lede">
     Everything tested. Numbers included. Run by an engineer who reads the 2am
     forum threads so you don't have to (I do it anyway, it's a condition).
+  </p>
+
+  <p class="lcd" style="margin-top: 1.5rem;">
+    <span>guides <span class="val">{pad(guides.length)}</span></span>
+    <span>lab notes <span class="val">{pad(notes.length)}</span></span>
+    {lastTested && (
+      <span>last test <span class="val">{lastTested}</span></span>
+    )}
   </p>
 
   {

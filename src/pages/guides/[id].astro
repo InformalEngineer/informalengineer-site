@@ -34,13 +34,15 @@ const schema = {
   </blockquote>
 
   <p class="section-label">tested on</p>
-  <table>
-    <tbody>
-      <tr><th>Hardware</th><td>{d.testedOn.hardware.join(', ')}</td></tr>
-      <tr><th>Software</th><td>{d.testedOn.software.join(', ')}</td></tr>
-      <tr><th>Date</th><td>{d.testedOn.date.toISOString().slice(0, 10)}</td></tr>
-    </tbody>
-  </table>
+  <div class="specplate">
+    <table>
+      <tbody>
+        <tr><th>Hardware</th><td>{d.testedOn.hardware.join(', ')}</td></tr>
+        <tr><th>Software</th><td>{d.testedOn.software.join(', ')}</td></tr>
+        <tr><th>Date</th><td>{d.testedOn.date.toISOString().slice(0, 10)}</td></tr>
+      </tbody>
+    </table>
+  </div>
 
   {
     d.bom && d.bom.length > 0 && (
