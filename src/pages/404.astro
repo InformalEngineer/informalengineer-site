@@ -42,7 +42,20 @@
   </head>
   <body>
     <main>
-      <h1>404. This page doesn't exist.</h1>
+      <!-- Oscilloscope with nothing on the probe (06-design-direction: the
+           lab's version of a no-signal screen), one blip then flatline. -->
+      <svg viewBox="0 0 280 48" width="280" height="48" aria-hidden="true" style="border: 1px solid #26292d; border-radius: 4px; background: #0d1410;">
+        <path
+          d="M0 30 H96 L104 12 L112 40 L120 30 H280"
+          fill="none"
+          stroke="#7dd3a0"
+          stroke-width="1.5"
+        />
+      </svg>
+      <p style="font-family: ui-monospace, monospace; font-size: 0.75rem; color: #5f6368; margin-top: 0.5rem;">
+        404 · nothing on this channel
+      </p>
+      <h1>This page doesn't exist.</h1>
       <p>
         Maybe it will (the lab is young). Start from <a href="/">the front page</a>.
       </p>

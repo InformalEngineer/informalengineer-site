@@ -50,6 +50,24 @@ holding inventory (until the data-locked trigger in 02-PRD §7 fires: one kit
 **Compliance gates:** affiliate disclosure on every kit page, every time.
 Nothing DRT/employer-specific ever.
 
+## Design
+
+**Visual language: [06-design-direction.md](./06-design-direction.md)
+(Rendered Nostalgia).** Read it before any design work. On this site the
+nostalgia arrives through instrumentation: refined lab-notebook base, era
+memory rendered in code only (no image assets, no copyrighted anything), max
+one overt artifact per viewport. Existing deployments: cartridge-label status
+badges (`.badge`), bench-meter LCD strip on home (`.lcd`, real counts only),
+riveted spec plate on tested-on blocks (`.specplate`), footer page-weight
+measurement in 56k seconds (inline script in Base.astro), oscilloscope
+flatline on the 404.
+
+## Git identity
+
+Commits and PRs are authored by **Mesh only**. Never add Claude co-author
+trailers, "Generated with" lines, or any AI attribution (history was rewritten
+on 2026-07-08 to purge them; do not reintroduce).
+
 ## Architecture (03-TRD)
 
 - **Astro + MDX + content collections, static output.** Zero-JS-by-default;
