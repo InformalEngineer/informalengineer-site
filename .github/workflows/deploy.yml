@@ -10,6 +10,9 @@ on:
 
 jobs:
   deploy:
+    # Dependabot PRs run without access to Actions secrets, so wrangler gets an
+    # empty CLOUDFLARE_API_TOKEN and the deploy can only fail. CI still builds them.
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     permissions:
       contents: read

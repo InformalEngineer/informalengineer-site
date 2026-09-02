@@ -10,8 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check links in content (dead affiliate links are revenue-relevant)
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Check links in the built site (dead affiliate links are revenue-relevant)
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --no-progress --exclude-mail './src/**/*.md' './src/**/*.mdx' './src/**/*.astro'
+          # Check the built site rather than the sources, so internal routes
+          # resolve and the underscore-prefixed templates (which Astro never
+          # publishes, and which carry placeholder affiliate URLs) stay out of it.
+          # 403 and 429 are how live hosts answer CI; a dead affiliate link
+          # returns 404 or 410, which still fails the run.
+          args: >-
+            --no-progress
+            --root-dir "$GITHUB_WORKSPACE/dist"
+            --accept 200..=299,403,429
+            --max-retries 2
+            './dist/**/*.html'
           fail: true

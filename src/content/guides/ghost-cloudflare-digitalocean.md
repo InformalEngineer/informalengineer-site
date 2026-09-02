@@ -232,7 +232,7 @@ server {
 }
 ```
 
-You want to direct your ssl\_certificate and key to the files you created earlier, additionally, I would add the www.yourdomain.com and increase the body size to 100m.
+You want to direct your ssl\_certificate and key to the files you created earlier, additionally, I would add the `www.yourdomain.com` and increase the body size to 100m.
 
 ```
 server {
