@@ -112,7 +112,7 @@ Go back to CloudFlare, navigate to DNS and we will have you add two records with
 
 ![](https://meshaelr.com/content/images/2022/07/image-11.png)
 
-Additionally, you should also create a CNAME Record and have the name point to www.
+Additionally, you should also create a CNAME Record and have the name point to `www`.
 
 ![](https://meshaelr.com/content/images/2022/07/image-20.png)
 
