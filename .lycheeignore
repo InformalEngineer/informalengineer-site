@@ -1,0 +1,3 @@
+# The local Ghost address quoted in the migration guide's instructions.
+# It is an address the reader types on their own machine, not a link out.
+^http://127\.0\.0\.1
