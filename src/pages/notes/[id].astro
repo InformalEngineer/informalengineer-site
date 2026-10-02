@@ -10,9 +10,27 @@ export async function getStaticPaths() {
 const { note } = Astro.props;
 const { Content } = await render(note);
 const d = note.data;
+// Meta description from the note's own first lines, not a status stamp:
+// search snippets and link previews should say what happened.
+const plain = (note.body ?? '')
+  .replace(/```[\s\S]*?```/g, ' ')
+  .replace(/[`*_>#\[\]]|\(https?:[^)]*\)/g, '')
+  .replace(/\s+/g, ' ')
+  .trim();
+const description = plain.length > 155 ? `${plain.slice(0, 152).replace(/\s\S*$/, '')}...` : plain;
+const noteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: d.title,
+  datePublished: d.date.toISOString(),
+  author: { '@type': 'Person', '@id': 'https://meshrahman.com/#person', name: 'Mesh Rahman', url: 'https://meshrahman.com' },
+  publisher: { '@id': 'https://informalengineer.com/#org', '@type': 'Organization', name: 'Informal Engineer' },
+  image: 'https://informalengineer.com/og.png',
+};
 ---
 
-<Base title={`${d.title} · Lab Notes`} description={`Lab note, ${d.status}, ${d.date.toISOString().slice(0, 10)}`}>
+<Base title={`${d.title} · Lab Notes`} description={description || `Lab note, ${d.status}, ${d.date.toISOString().slice(0, 10)}`} ogType="article">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(noteSchema)} />
   <p style="font-family: ui-monospace, monospace; font-size: 0.75rem; color: var(--faint);">
     {d.date.toISOString().slice(0, 10)}
     {d.tags.length > 0 && ` · ${d.tags.join(', ')}`}

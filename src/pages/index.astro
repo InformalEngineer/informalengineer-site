@@ -24,19 +24,26 @@ const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
 <Base
-  title="Informal Engineer, everything tested, numbers included"
-  description="Engineered guides for people who build their own infrastructure, homelab, self-hosted AI, and the tools around them. Everything tested, numbers included."
+  title="Informal Engineer · Tested homelab and self-hosting guides, costs in CAD"
+  description="Homelab, Proxmox, NAS, and self-hosted AI guides tested on hardware I own, with named versions, dated changelogs, and what it actually cost in CAD."
 >
-  <h1>
-    Engineered guides for people who build their own infrastructure, homelab,
-    self-hosted AI, and the tools around them.
+  <p class="kicker">everything tested, numbers included</p>
+  <h1 class="hero">
+    Homelab guides tested on hardware I actually own, costs in CAD included.
   </h1>
   <p class="lede">
-    Everything tested. Numbers included. Run by an engineer who reads the 2am
-    forum threads so you don't have to (I do it anyway, it's a condition).
+    Proxmox on used mini PCs, NAS builds, local AI, and the tools around them.
+    Every guide names the exact hardware and versions it was tested on, and
+    the experiments that failed stay published. Run by an engineer who reads
+    the 2am forum threads so you don't have to (I do it anyway, it's a
+    condition).
+  </p>
+  <p class="cta-row">
+    <a class="btn" href="/guides/">Browse the guides →</a>
+    <a class="btn ghost" href="/notes/">Latest lab notes</a>
   </p>
 
-  <p class="lcd" style="margin-top: 1.5rem;">
+  <p class="lcd" style="margin-top: 1.75rem;">
     <span>guides <span class="val">{pad(guides.length)}</span></span>
     <span>lab notes <span class="val">{pad(notes.length)}</span></span>
     {lastTested && (
@@ -64,17 +71,108 @@ const pad = (n: number) => String(n).padStart(2, '0');
   {
     latestNotes.map((note) => (
       <a class="card" href={`/notes/${note.id}/`}>
-        <span class="badge">{note.data.status}</span>
+        <span class:list={['badge', note.data.status]}>{note.data.status}</span>
         <strong> {note.data.title}</strong>
         <div class="meta">{note.data.date.toISOString().slice(0, 10)}</div>
       </a>
     ))
   }
 
+  <p class="section-label" id="standard">what every guide carries</p>
+  <ul class="standard" aria-labelledby="standard">
+    <li>
+      <span class="plate-label">tested on</span>
+      <span>The exact hardware and software versions, and the date I ran it. "Linux" is not a version.</span>
+    </li>
+    <li>
+      <span class="plate-label">costs</span>
+      <span>What I actually paid, in Canadian dollars, dated. Not list price, not "around".</span>
+    </li>
+    <li>
+      <span class="plate-label">changelog</span>
+      <span>When a new version breaks a step, the fix gets a dated entry. No silent edits.</span>
+    </li>
+    <li>
+      <span class="plate-label">failures</span>
+      <span>Abandoned experiments stay up with an ABANDONED badge. Negative results are data.</span>
+    </li>
+  </ul>
+
   <p class="section-label">the newsletter</p>
   <p class="lede">
-    Lab Notes weekly: what got tested, what the numbers said, one useful link.
-    <a href="/newsletter/">Details and signup</a>, or take the
+    Lab Notes weekly, one short email with what got tested and what the
+    numbers said. <a href="/newsletter/">Details and signup</a>, or take the
     <a href="/rss.xml">full-content RSS feed</a>, no account needed.
   </p>
 </Base>
+
+<style>
+  .kicker {
+    font-family: ui-monospace, monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin: 0 0 0.75rem;
+  }
+  .hero {
+    font-size: clamp(1.75rem, 5vw, 2.4rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    max-width: 36rem;
+  }
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+  }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 0.55rem 1.1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+  .btn.ghost {
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid var(--border);
+  }
+  .btn.ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  /* The standard as four riveted plates (06-design-direction: spec plates). */
+  .standard {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0;
+    display: grid;
+    gap: 0.6rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+  .standard li {
+    position: relative;
+    display: grid;
+    gap: 0.3rem;
+    padding: 0.9rem 1.1rem 0.95rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background:
+      radial-gradient(circle 2px at 8px 8px, var(--faint) 1.5px, transparent 2.5px),
+      radial-gradient(circle 2px at calc(100% - 8px) 8px, var(--faint) 1.5px, transparent 2.5px),
+      #16181b;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .plate-label {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+</style>
