@@ -25,3 +25,8 @@ Products: curated hardware kits with affiliate links and measured costs
 
 - [Build a website with Ghost, Cloudflare, and DigitalOcean](https://informalengineer.com/guides/ghost-cloudflare-digitalocean/): self-hosting a Ghost blog end to end
 - [My Cursor AI workflow](https://informalengineer.com/guides/cursor-ai-workflow/): practical AI-assisted coding setup and habits
+
+## Lab Notes
+
+- [Eight weeks of failure emails from a link checker that had never checked a link](https://informalengineer.com/notes/2026-09-02-link-check-never-ran/): a lychee flag change broke the weekly link check, 826 links rechecked, 0 errors after the fix
+- [Rebuilt the whole web presence: 2 sites, 5 repos, $0 a month](https://informalengineer.com/notes/2026-07-07-site-rebuild-shipped/)

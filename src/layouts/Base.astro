@@ -2,44 +2,90 @@
 interface Props {
   title: string;
   description: string;
+  ogType?: "website" | "article";
 }
-const { title, description } = Astro.props;
+const { title, description, ogType = "website" } = Astro.props;
 
+// Canonical is always the clean production URL for this path, so preview
+// deploys (*.pages.dev) never compete with the real site in search.
+const site = Astro.site ?? new URL("https://informalengineer.com");
+const canonical = new URL(Astro.url.pathname, site).href;
+const ogImage = new URL("/og.png", site).href;
+
+// Header nav carries only sections with something in them (audit 2026-10).
+// Kits and Research stay live and linked from the footer, and move back up
+// here the day the first kit and the first research write-up ship.
 const nav = [
   { href: "/guides/", label: "Guides" },
   { href: "/notes/", label: "Lab Notes" },
-  { href: "/kits/", label: "Kits" },
   { href: "/northstack/", label: "Northstack" },
-  { href: "/research/", label: "Research" },
   { href: "/about/", label: "About" },
 ];
+const path = Astro.url.pathname;
+
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://informalengineer.com/#org",
+  name: "Informal Engineer",
+  url: "https://informalengineer.com",
+  logo: "https://informalengineer.com/favicon.svg",
+  description:
+    "A lab that publishes tested homelab, self-hosting, and local AI guides with measured costs in CAD.",
+  founder: { "@type": "Person", "@id": "https://meshrahman.com/#person", name: "Mesh Rahman", url: "https://meshrahman.com" },
+  sameAs: ["https://github.com/InformalEngineer", "https://meshrahman.com"],
+};
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en-CA">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:site_name" content="Informal Engineer" />
+    <meta property="og:locale" content="en_CA" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="theme-color" content="#101214" />
+    {path === "/" && <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />}
     <link rel="alternate" type="application/rss+xml" title="Informal Engineer, everything" href="/rss.xml" />
     <link rel="alternate" type="application/rss+xml" title="Lab Notes" href="/notes/rss.xml" />
     <link rel="alternate" type="application/rss+xml" title="Guides" href="/guides/rss.xml" />
     <slot name="head" />
   </head>
   <body>
+    <a class="skip" href="#main">Skip to content</a>
     <header>
       <div class="shell header-row">
         <a class="brand" href="/">informal engineer</a>
-        <nav>
-          {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+        <nav aria-label="Main">
+          {
+            nav.map((item) => (
+              <a href={item.href} aria-current={path.startsWith(item.href) ? "page" : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
         </nav>
         <a class="sibling" href="https://meshrahman.com">by @meshrahman ↗</a>
       </div>
     </header>
-    <main class="shell">
+    <main class="shell" id="main" tabindex="-1">
       <slot />
     </main>
     <footer>
@@ -52,10 +98,37 @@ const nav = [
         <p class="fine">
           Some kit links are affiliate links, always disclosed on the page they
           appear on. <a href="/about/">Editorial standards</a> ·
+          <a href="/kits/">Kits</a> ·
+          <a href="/research/">Research</a> ·
           <a href="/newsletter/">Newsletter</a> ·
           <a href="https://github.com/InformalEngineer">GitHub</a>
         </p>
         <p class="fine bench" id="bench-line" hidden></p>
+        <script is:inline>
+          // Copy buttons on code blocks (02-PRD F3). Added by script so a
+          // no-JS reader never sees a button that does nothing.
+          (function () {
+            if (!navigator.clipboard) return;
+            document.querySelectorAll(".prose pre").forEach(function (pre) {
+              var wrap = document.createElement("div");
+              wrap.className = "code-wrap";
+              pre.parentNode.insertBefore(wrap, pre);
+              wrap.appendChild(pre);
+              var btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = "copy-btn";
+              btn.textContent = "copy";
+              btn.setAttribute("aria-label", "Copy code to clipboard");
+              btn.addEventListener("click", function () {
+                navigator.clipboard.writeText(pre.innerText.trimEnd()).then(function () {
+                  btn.textContent = "copied";
+                  setTimeout(function () { btn.textContent = "copy"; }, 1500);
+                });
+              });
+              wrap.appendChild(btn);
+            });
+          })();
+        </script>
         <script is:inline>
           // Lab measurement of the page itself (06-design-direction: dial-up
           // honesty). Real transfer size from this browser, priced in 56k
@@ -88,7 +161,9 @@ const nav = [
         --bg: #101214;
         --fg: #e8eaed;
         --muted: #9aa0a6;
-        --faint: #5f6368;
+        /* was #5f6368, 3.0:1 on --bg, under WCAG AA for the small mono
+           labels and meta lines it colours. This is 5.3:1. */
+        --faint: #868b91;
         --accent: #7dd3a0;
         --border: #26292d;
       }
@@ -138,8 +213,36 @@ const nav = [
         text-decoration: none;
         font-size: 0.9rem;
       }
-      nav a:hover {
+      nav a:hover,
+      nav a[aria-current="page"] {
         color: var(--fg);
+      }
+      nav a[aria-current="page"] {
+        text-decoration: underline;
+        text-decoration-color: var(--accent);
+        text-underline-offset: 0.45em;
+      }
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+        border-radius: 2px;
+      }
+      main:focus {
+        outline: none;
+      }
+      .skip {
+        position: absolute;
+        left: 1rem;
+        top: -3rem;
+        z-index: 10;
+        background: var(--accent);
+        color: var(--bg);
+        padding: 0.4rem 0.9rem;
+        border-radius: 4px;
+        text-decoration: none;
+      }
+      .skip:focus {
+        top: 1rem;
       }
       .sibling {
         margin-left: auto;
@@ -252,6 +355,25 @@ const nav = [
         padding: 1rem;
         overflow-x: auto;
         font-size: 0.85rem;
+      }
+      .code-wrap {
+        position: relative;
+      }
+      .copy-btn {
+        position: absolute;
+        top: 0.45rem;
+        right: 0.45rem;
+        font: 0.7rem ui-monospace, monospace;
+        color: var(--muted);
+        background: #1c1f22;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 0.15rem 0.5rem;
+        cursor: pointer;
+      }
+      .copy-btn:hover {
+        color: var(--accent);
+        border-color: var(--accent);
       }
       .prose img {
         max-width: 100%;
